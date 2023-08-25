@@ -10,7 +10,7 @@
         { docker build -t $DOCKERTAG -f /valohai/repository/Dockerfile --progress=plain . ;
         docker login -u $DHUSERNAME -p $DHPASSWORD;
         docker push $DOCKERTAG; }
-    icon: dockerhub
+    icon: docker_hub
     category: Docker build & push image
     inputs:
         - name: dockerfileinput
