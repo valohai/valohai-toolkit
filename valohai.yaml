@@ -3,13 +3,15 @@
     image: docker:dind
     command: 
       - apk add --no-cache python3 py3-pip
-      - python ./dockerimagebuilder/writedockerfile.py {parameters}
+      - python ./docker_image_builder/writeDockerfile.py {parameters}
       - dockerd &
       - export DOCKERTAG={parameter-value:docker-tag}
       - test -f "/valohai/repository/Dockerfile" &&
         { docker build -t $DOCKERTAG -f /valohai/repository/Dockerfile --progress=plain . ;
         docker login -u $DHUSERNAME -p $DHPASSWORD;
         docker push $DOCKERTAG; }
+    icon: dockerhub
+    category: Docker build & push image
     inputs:
         - name: dockerfileinput
           optional: true
@@ -31,7 +33,7 @@
 
             # Copy the requirements.txt file to our Docker image
 
-            ADD ./dockerimagebuilder/requirements.txt .
+            ADD ./docker_image_builder/requirements.txt .
 
 
             # Install the requirements.txt
@@ -47,7 +49,7 @@
     image: docker:dind
     command: 
       - apk add --no-cache python3 py3-pip
-      - python ./dockerimagebuilder/writedockerfile.py {parameters}
+      - python ./docker_image_builder/writeDockerfile.py {parameters}
       - dockerd &
       - export DOCKERTAG={parameter-value:docker-tag} && 
         export REPOSITORY={parameter-value:repository}
@@ -55,6 +57,8 @@
         { docker build -t $DOCKERTAG -f /valohai/repository/Dockerfile --progress=plain . ;
         echo $GCPKEY | docker login -u _json_key --password-stdin $REPOSITORY;
         docker push $DOCKERTAG; }
+    icon: gcp-artifact-registry
+    category: Docker build & push image
     inputs:
         - name: dockerfileinput
           optional: true
@@ -76,7 +80,7 @@
 
             # Copy the requirements.txt file to our Docker image
 
-            ADD ./dockerimagebuilder/requirements.txt .
+            ADD ./docker_image_builder/requirements.txt .
 
 
             # Install the requirements.txt
@@ -92,7 +96,7 @@
     image: docker:dind
     command: 
       - apk add --no-cache python3 py3-pip aws-cli
-      - python ./dockerimagebuilder/writedockerfile.py {parameters}
+      - python ./docker_image_builder/writeDockerfile.py {parameters}
       - dockerd &
       - export DOCKERTAG={parameter-value:docker-tag} && 
         export REPOSITORY={parameter-value:repository} &&
@@ -101,6 +105,8 @@
         { docker build -t $DOCKERTAG -f /valohai/repository/Dockerfile --progress=plain . ;
         aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $REPOSITORY;
         docker push $DOCKERTAG; }
+    icon: aws-ecr
+    category: Docker build & push image
     inputs:
         - name: dockerfileinput
           optional: true
@@ -122,7 +128,7 @@
 
             # Copy the requirements.txt file to our Docker image
 
-            ADD ./dockerimagebuilder/requirements.txt .
+            ADD ./docker_image_builder/requirements.txt .
 
 
             # Install the requirements.txt
