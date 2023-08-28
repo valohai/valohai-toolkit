@@ -31,14 +31,9 @@
             FROM python:3.9
 
 
-            # Copy the requirements.txt file to our Docker image
+            # Replace valohai-utils with the libraries you want to add
 
-            ADD ./docker_image_builder/requirements.txt .
-
-
-            # Install the requirements.txt
-
-            RUN pip install -r requirements.txt"
+            RUN pip install valohai-utils"
           type: string
           optional: true
           description: You can use this parameter to provide the Dockerfile contents instead of giving it as an input.
@@ -78,14 +73,9 @@
             FROM python:3.9
 
 
-            # Copy the requirements.txt file to our Docker image
+            # Replace valohai-utils with the libraries you want to add
 
-            ADD ./docker_image_builder/requirements.txt .
-
-
-            # Install the requirements.txt
-
-            RUN pip install -r requirements.txt"
+            RUN pip install valohai-utils"
           type: string
           optional: true
           description: You can use this parameter to provide the Dockerfile contents instead of giving it as an input.
@@ -126,14 +116,9 @@
             FROM python:3.9
 
 
-            # Copy the requirements.txt file to our Docker image
+            # Replace valohai-utils with the libraries you want to add
 
-            ADD ./docker_image_builder/requirements.txt .
-
-
-            # Install the requirements.txt
-
-            RUN pip install -r requirements.txt"
+            RUN pip install valohai-utils"
           type: string
           optional: true
           description: You can use this parameter to provide the Dockerfile contents instead of giving it as an input.
