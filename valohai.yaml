@@ -1,0 +1,125 @@
+- step:
+    name: docker-image-dockerhub
+    image: docker:dind
+    command: 
+      - apk add --no-cache python3 py3-pip
+      - python ./docker_image_builder/writeDockerfile.py {parameters}
+      - dockerd &
+      - export DOCKERTAG={parameter-value:docker-tag}
+      - test -f "/valohai/repository/Dockerfile" &&
+        { docker build -t $DOCKERTAG -f /valohai/repository/Dockerfile --progress=plain . ;
+        docker login -u $DHUSERNAME -p $DHPASSWORD;
+        docker push $DOCKERTAG; }
+    icon: docker_hub
+    category: Docker build & push image
+    inputs:
+        - name: dockerfileinput
+          optional: true
+    parameters:
+        - name: docker-tag
+          optional: true
+          description: "Defines the image tag when building and pushing the image: <USERNAME>/<REPOSITORY>:<TAG>. Note that if there is already an image with the same tag, the old image will be removed."
+        - name: repository
+          type: string
+          description: "Required for docker login in AWS and GCP. Leave empty for Docker Hub."
+        - name: region
+          type: string
+          description: "AWS region, leave empty for Docker Hub and GCP."          
+        - name: dockerfile
+          default: "# Our base image
+
+            FROM python:3.9
+
+
+            # Replace valohai-utils with the libraries you want to add
+
+            RUN pip install valohai-utils"
+          type: string
+          optional: true
+          description: You can use this parameter to provide the Dockerfile contents instead of giving it as an input.
+          widget: dockerfile
+
+- step:
+    name: docker-image-gcp
+    image: docker:dind
+    command: 
+      - apk add --no-cache python3 py3-pip
+      - python ./docker_image_builder/writeDockerfile.py {parameters}
+      - dockerd &
+      - export DOCKERTAG={parameter-value:docker-tag} && 
+        export REPOSITORY={parameter-value:repository}
+      - test -f "/valohai/repository/Dockerfile" && 
+        { docker build -t $DOCKERTAG -f /valohai/repository/Dockerfile --progress=plain . ;
+        echo $GCPKEY | docker login -u _json_key --password-stdin $REPOSITORY;
+        docker push $DOCKERTAG; }
+    icon: artifact_registry
+    category: Docker build & push image
+    inputs:
+        - name: dockerfileinput
+          optional: true
+    parameters:
+        - name: docker-tag
+          description: "Tag that is used when pushing the image to the registry: <REGION>-docker.pkg.dev/<PROJECT_ID>/<REPOSITORY>/<IMAGE>:<TAG>. Note that if there is already an image with the same tag, the tag will be removed and assigned to the new image." 
+        - name: repository
+          type: string
+          description: "Required for docker login in AWS and GCP: https://<REGION>-docker.pkg.dev"
+        - name: region
+          type: string
+          optional: true
+          description: "AWS region, leave empty for Docker Hub and GCP."    
+        - name: dockerfile
+          default: "# Our base image
+
+            FROM python:3.9
+
+
+            # Replace valohai-utils with the libraries you want to add
+
+            RUN pip install valohai-utils"
+          type: string
+          optional: true
+          description: You can use this parameter to provide the Dockerfile contents instead of giving it as an input.
+          widget: dockerfile
+
+- step:
+    name: docker-image-aws
+    image: docker:dind
+    command: 
+      - apk add --no-cache python3 py3-pip aws-cli
+      - python ./docker_image_builder/writeDockerfile.py {parameters}
+      - dockerd &
+      - export DOCKERTAG={parameter-value:docker-tag} && 
+        export REPOSITORY={parameter-value:repository} &&
+        export REGION={parameter-value:region}
+      - test -f "/valohai/repository/Dockerfile" && 
+        { docker build -t $DOCKERTAG -f /valohai/repository/Dockerfile --progress=plain . ;
+        aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $REPOSITORY;
+        docker push $DOCKERTAG; }
+    icon: ecr
+    category: Docker build & push image
+    inputs:
+        - name: dockerfileinput
+          optional: true
+    parameters:
+        - name: docker-tag
+          type: string
+          description: "Tag that is used when pushing the image to the registry: <AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/<REPOSITORY>:<TAG>. Note that if there is already an image with the same tag, the tag will be removed and assigned to the new image." 
+        - name: repository
+          type: string
+          description: "Required for docker login in AWS and GCP: <AWS_ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/<REPOSITORY>"
+        - name: region
+          type: string
+          description: "Provide the AWS region, e.g. eu-west-1."        
+        - name: dockerfile
+          default: "# Our base image
+
+            FROM python:3.9
+
+
+            # Replace valohai-utils with the libraries you want to add
+
+            RUN pip install valohai-utils"
+          type: string
+          optional: true
+          description: You can use this parameter to provide the Dockerfile contents instead of giving it as an input.
+          widget: dockerfile
