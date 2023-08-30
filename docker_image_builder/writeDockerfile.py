@@ -7,7 +7,7 @@ def parse_args():
     parser.add_argument('--dockerfile', type=str, default="")
     parser.add_argument('--docker-tag', type=str, default="")
     parser.add_argument('--repository', type=str, default="")
-    parser.add_argument('--awsregion', type=str, default="")
+    parser.add_argument('--region', type=str, default="")
     return parser.parse_args()
 
 # Check if the Dockerfile was provided as an input.
