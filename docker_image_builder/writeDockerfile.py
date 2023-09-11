@@ -5,9 +5,6 @@ import argparse
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--dockerfile', type=str, default="")
-    parser.add_argument('--docker-tag', type=str, default="")
-    parser.add_argument('--repository', type=str, default="")
-    parser.add_argument('--awsregion', type=str, default="")
     return parser.parse_args()
 
 # Check if the Dockerfile was provided as an input.
@@ -30,7 +27,7 @@ def main():
 
         if args.dockerfile:
             print("Dockerfile contents provided as a parameter.")
-            f = open("/valohai/repository/Dockerfile", "a")
+            f = open("/valohai/repository/Dockerfile", "w+")
             f.write(args.dockerfile)
             f.close()
         else:
