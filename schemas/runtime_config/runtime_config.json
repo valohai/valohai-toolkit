@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/valohai/valohai-toolkit/blob/master/schemas/runtime_config/runtime_config.json",
+  "title": "Runtime Configuration",
+  "description": "runtime_config specification",
+  "type": "object",
+  "properties": {
+    "kubernetes": {
+      "description": "Kubernetes runtime_config",
+      "type": "object",
+      "properties": {
+        "containers": {
+          "type": "object",
+          "properties": {
+            "workload": {
+              "type": "object",
+              "properties": {
+                "resources": {
+                  "type": "object",
+                  "properties": {
+                    "requests": {
+                      "description": "Minimum CPU and memory requirements",
+                      "type": "object",
+                      "properties": {
+                        "cpu": {
+                          "description": "Minimum CPU units",
+                          "type": "number",
+                          "minimum": 0.1
+                        },
+                        "memory": {
+                          "description": "Minimum memory MB",
+                          "type": "integer",
+                          "minimum": 1
+                        }
+                      }
+                    },
+                    "limits": {
+                      "description": "Optional max. CPU and memory, plus additional device requirements",
+                      "type": "object",
+                      "properties": {
+                        "cpu": {
+                          "description": "Maximum CPU units",
+                          "type": "number",
+                          "minimum": 0.1
+                        },
+                        "memory": {
+                          "description": "Maximum memory MB",
+                          "type": "integer",
+                          "minimum": 1
+                        },
+                        "devices": {
+                          "description": "Additional device requirements (name: nr of devices)",
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "integer",
+                            "minimum": 1
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
