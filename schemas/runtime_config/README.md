@@ -14,7 +14,7 @@ You can define the schema in your JSON file by starting with this template:
 
 ```json
 {
-    "$schema": "https://raw.githubusercontent.com/valohai/valohai-toolkit/runtime_config/schemas/runtime_config/runtime_config.json",
+    "$schema": "https://raw.githubusercontent.com/valohai/valohai-toolkit/master/schemas/runtime_config/runtime_config.json",
 }
 ```
 
@@ -28,7 +28,7 @@ Alternatively, you can configure VS Code to use the schema automatically for cer
       "fileMatch": [
         "*_runtime_config.json"
       ],
-      "url": "https://raw.githubusercontent.com/valohai/valohai-toolkit/runtime_config/schemas/runtime_config/runtime_config.json"
+      "url": "https://raw.githubusercontent.com/valohai/valohai-toolkit/master/schemas/runtime_config/runtime_config.json"
     }
 ]
 ```
