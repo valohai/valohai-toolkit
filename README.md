@@ -3,6 +3,7 @@
 Helpful tools and samples for the MLOps platform Valohai.
 
 - [Docker Image Builder](#docker-image-builder)
+- [JSON Schema for runtime_config](./schemas/runtime_config/README.md)
 
 ## Docker Image Builder
 
